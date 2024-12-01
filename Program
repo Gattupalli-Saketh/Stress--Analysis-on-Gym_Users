@@ -1,0 +1,54 @@
+#Importing PANDAS library for data collection,cleaning.
+import pandas as pd
+df = pd.read_csv('gym_members_exercise_tracking.csv')
+#Addition of column named S.No as the file dosen't have it and easier for us(I may be called as ID as well)
+df['S.No'] = range(1, len(df) + 1)
+#Importing data which are requried for the calculation
+filtered_coloum = df[['S.No','Max_BPM','Avg_BPM','Resting_BPM','Weight (kg)','Fat_Percentage']].rename(columns={'Weight (kg)': 'weight'})
+print(filtered_coloum.head())
+
+#A function to calculate the mass of the user
+def cal_mass(weight:float,Fat_percentage:float)->float:
+    return weight * (Fat_percentage/100)
+
+#A function to calculate the stress of the user
+def cal_stress(max_bpm:float,avg_bpm:float,res_bpm:float,body_mass:float,weight:float, Fat_percentage:float)->float:
+    stress= (max_bpm - res_bpm) + (avg_bpm - res_bpm) + (body_mass / 10)
+    return stress
+
+#Function to display the output of the above functions 
+def display_data_stress(Serial_num):
+    if 1<= Serial_num <= len(df):
+        mem_data = df[df['S.No'] == Serial_num].iloc[0]
+
+        max_bpm = mem_data['Max_BPM']
+        avg_bpm = mem_data['Avg_BPM']
+        res_bpm = mem_data['Resting_BPM']
+        weight = mem_data['Weight (kg)']  
+        Fat_percentage = mem_data['Fat_Percentage']
+
+        body_mass = cal_mass(weight,Fat_percentage)
+
+        
+        stress_level = cal_stress(max_bpm, avg_bpm, res_bpm, body_mass, weight, Fat_percentage)
+        print(f"Heart Rate Data for Serial Number {Serial_num}:")
+        print(f"Max BPM: {max_bpm}")
+        print(f"Avg BPM: {avg_bpm}")
+        print(f"Resting BPM: {res_bpm}")
+        print(f"Weight: {weight} kg")
+        print(f"Fat Percentage: {Fat_percentage}%")
+        print(f"Body Mass: {body_mass:.2f}")
+        print(f"Calculated Stress Level: {stress_level:.2f}")
+    else:
+        print(f"Invalid serial number: {Serial_num}. Please enter a number between 1 and {len(df)}.")
+
+#Main execution block to handle user input and display stress data
+if __name__ == "__main__":
+    try:
+        #User input t enter S.Np or ID
+        user_input_serial = int(input("Enter The ID of user:"))
+        display_data_stress(user_input_serial)
+
+    except:
+        #Exception handling for the incorrect input from the user 
+        print("Enter a valid ID")

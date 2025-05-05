@@ -26,8 +26,8 @@ It allows you to input a **serial number (ID)** to retrieve detailed member data
 1️⃣ **Clone the repository** (if applicable):
 
 ```bash
-git clone <repository-url>
-cd <repository-directory>
+git clone https://github.com/Gattupalli-Saketh/Stress--Analysis-on-Gym_Users.git
+cd Stress--Analysis-on-Gym_Users
 ```
 
 2️⃣ **Install dependencies**:
